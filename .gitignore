@@ -10,6 +10,11 @@ integrationtests/workspaces/clangd/clean_program
 integrationtests/workspaces/clangd/program
 integrationtests/workspaces/clangd/.cache
 
+# Dart
+.dart_tool/
+*.dart.js
+*.dart.js.map
+
 
 # Temporary files
 *~

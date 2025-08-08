@@ -47,8 +47,8 @@ func GetHoverInfo(ctx context.Context, client *lsp.Client, filePath string, line
 
 	var result strings.Builder
 
-	// Process the hover contents based on Markup content
-	if hoverResult.Contents.Value == "" {
+	// Process the hover contents based on the union type
+	if hoverResult.Contents.Value == nil {
 		// Extract the line where the hover was requested
 		lineText, err := ExtractTextFromLocation(protocol.Location{
 			URI: uri,
@@ -68,7 +68,40 @@ func GetHoverInfo(ctx context.Context, client *lsp.Client, filePath string, line
 		}
 		result.WriteString(fmt.Sprintf("No hover information available for this position on the following line:\n%s", lineText))
 	} else {
-		result.WriteString(hoverResult.Contents.Value)
+		// Handle the different types that contents can be
+		switch v := hoverResult.Contents.Value.(type) {
+		case protocol.MarkupContent:
+			result.WriteString(v.Value)
+		case protocol.MarkedString:
+			// MarkedString is a union type itself (string | {language, value})
+			switch ms := v.Value.(type) {
+			case string:
+				result.WriteString(ms)
+			case protocol.MarkedStringWithLanguage:
+				// Format as markdown code block
+				result.WriteString(fmt.Sprintf("```%s\n%s\n```", ms.Language, ms.Value))
+			default:
+				result.WriteString(fmt.Sprintf("%v", ms))
+			}
+		case []protocol.MarkedString:
+			// Multiple marked strings - concatenate them
+			for i, ms := range v {
+				if i > 0 {
+					result.WriteString("\n")
+				}
+				switch msv := ms.Value.(type) {
+				case string:
+					result.WriteString(msv)
+				case protocol.MarkedStringWithLanguage:
+					result.WriteString(fmt.Sprintf("```%s\n%s\n```", msv.Language, msv.Value))
+				default:
+					result.WriteString(fmt.Sprintf("%v", msv))
+				}
+			}
+		default:
+			// Fallback for unexpected types
+			result.WriteString(fmt.Sprintf("%v", v))
+		}
 	}
 
 	return result.String(), nil

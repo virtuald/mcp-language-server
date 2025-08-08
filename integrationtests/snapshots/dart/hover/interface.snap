@@ -1,0 +1,7 @@
+```dart
+abstract class SharedInterface
+```
+*types.dart*
+
+---
+An interface for testing

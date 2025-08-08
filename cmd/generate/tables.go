@@ -67,7 +67,7 @@ var renameProp = map[prop]string{
 
 	{"ExecuteCommandParams", "arguments"}: "[]json.RawMessage",
 	{"FoldingRange", "kind"}:              "string",
-	{"Hover", "contents"}:                 "MarkupContent",
+	{"Hover", "contents"}:                 "Or_Hover_contents",
 	{"InlayHint", "label"}:                "[]InlayHintLabelPart",
 
 	{"RelatedFullDocumentDiagnosticReport", "relatedDocuments"}:      "map[DocumentUri]interface{}",

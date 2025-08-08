@@ -1,0 +1,10 @@
+---
+
+Symbol: globalHelper
+/TEST_OUTPUT/workspace/helper.dart
+Kind: Variable
+Range: L29:C1 - L30:C43
+
+29|/// Global variable for testing
+30|final globalHelper = HelperClass('global')
+

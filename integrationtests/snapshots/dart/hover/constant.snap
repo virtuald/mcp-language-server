@@ -1,0 +1,9 @@
+```dart
+String SHARED_CONSTANT
+```
+Type: `String`
+
+*types.dart*
+
+---
+A constant value

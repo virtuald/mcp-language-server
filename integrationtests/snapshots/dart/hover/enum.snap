@@ -1,0 +1,7 @@
+```dart
+enum Color
+```
+*types.dart*
+
+---
+An enum for testing

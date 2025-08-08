@@ -1,0 +1,7 @@
+```dart
+typedef ProcessFunction = String Function(int )
+```
+*types.dart*
+
+---
+A type alias for testing

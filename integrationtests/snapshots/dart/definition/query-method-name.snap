@@ -1,0 +1,107 @@
+---
+
+Symbol: process
+File: /DART_SDK/lib/io/io_resource_info.dart
+Kind: Field
+Container Name: _SpawnedProcessResourceInfo
+Range: L146:C3 - L146:C25
+
+146|final _Process process
+
+---
+
+Symbol: process
+File: /PUB_CACHE/hosted/pub.dev/test_core-0.6.12/lib/src/runner/vm/test_compiler.dart
+Kind: Enum
+Range: L246:C1 - L246:C35
+
+246|enum VmTestType { isolate, process }
+
+---
+
+Symbol: process()
+/TEST_OUTPUT/workspace/helper.dart
+Kind: Method
+Container Name: HelperClass
+Range: L17:C3 - L21:C4
+
+17|/// Process method specific to HelperClass
+18|  void process() {
+19|    doSomething();
+20|    print('Processing: ${getName()}');
+21|  }
+
+---
+
+Symbol: process()
+/TEST_OUTPUT/workspace/types.dart
+Kind: Method
+Container Name: SharedClass
+Range: L14:C3 - L17:C4
+
+14|/// A method that processes the value
+15|  String process() {
+16|    return 'Processed: $value';
+17|  }
+
+---
+
+Symbol: process()
+File: /DART_SDK/lib/ffi/dynamic_library.dart
+Kind: Constructor
+Container Name: DynamicLibrary
+Range: L12:C3 - L16:C45
+
+12|/// Creates a [DynamicLibrary] holding all global symbols.
+13|  ///
+14|  /// Any symbol in a library currently loaded with global visibility
+15|  /// (including the executable itself) may be resolved through this library.
+16|  external factory DynamicLibrary.process();
+
+---
+
+Symbol: process(…)
+File: /DART_SDK/lib/io/data_transformer.dart
+Kind: Method
+Container Name: RawZLibFilter
+Range: L436:C3 - L439:C52
+
+436|/// Process a chunk of data.
+437|  ///
+438|  /// This method must only be called when [processed] returns `null`.
+439|  void process(List<int> data, int start, int end);
+
+---
+
+Symbol: process(…)
+File: /PUB_CACHE/hosted/pub.dev/analyzer-8.1.0/lib/src/dart/element/replace_top_bottom_visitor.dart
+Kind: Method
+Container Name: ReplaceTopBottomVisitor
+Range: L20:C3 - L44:C4
+
+20|TypeImpl process(TypeImpl type, Variance variance) {
+21|    if (variance.isContravariant) {
+22|      // ...replacing every occurrence in `T` of a type `S` in a contravariant
+23|      // position where `S <: Never` by `Object?`
+24|      if (_typeSystem.isSubtypeOf(type, NeverTypeImpl.instance)) {
+25|        return _topType;
+26|      }
+27|    } else {
+28|      // ...and every occurrence in `T` of a top type in a position which
+29|      // is not contravariant by `Never`.
+30|      if (_typeSystem.isTop(type)) {
+31|        return _bottomType;
+32|      }
+33|    }
+34|
+35|    var alias = type.alias;
+36|    if (alias != null) {
+37|      return _instantiatedTypeAlias(type, alias, variance);
+38|    } else if (type is InterfaceTypeImpl) {
+39|      return _interfaceType(type, variance);
+40|    } else if (type is FunctionTypeImpl) {
+41|      return _functionType(type, variance);
+42|    }
+43|    return type;
+44|  }
+

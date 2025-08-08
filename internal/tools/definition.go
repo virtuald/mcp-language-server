@@ -34,9 +34,30 @@ func ReadDefinition(ctx context.Context, client *lsp.Client, symbolName string) 
 				return true
 			}
 
+			// Handle Dart LSP's function/method naming convention
+			// Dart returns names like "functionName()" or "functionName(…)"
+			if strings.HasPrefix(thisName, symbolName+"(") {
+				return true
+			}
+
+			// Also handle the reverse - if user searches for "functionName()" but symbol is "functionName"
+			if strings.HasPrefix(symbolName, thisName+"(") {
+				return true
+			}
+
 			// Handle different matching strategies based on the search term
 			if strings.Contains(symbolName, ".") {
-				// For qualified names like "Type.Method", don't do fuzzy match
+				// For qualified names like "Type.Method", handle Dart's naming
+				parts := strings.Split(symbolName, ".")
+				if len(parts) == 2 {
+					className := parts[0]
+					methodName := parts[1]
+					// Check if this is a method in the specified class
+					if vContainerName == className &&
+						(thisName == methodName || strings.HasPrefix(thisName, methodName+"(")) {
+						return true
+					}
+				}
 
 			} else if vKind == protocol.Method {
 				// For methods, only match if the method name matches exactly Type.symbolName or Type::symbolName or symbolName
@@ -71,6 +92,12 @@ func ReadDefinition(ctx context.Context, client *lsp.Client, symbolName string) 
 		toolsLogger.Debug("Found symbol: %s", symbol.GetName())
 		loc := symbol.GetLocation()
 
+		// Check if location has a valid URI
+		if string(loc.URI) == "" {
+			toolsLogger.Error("Symbol %s has empty URI, skipping", symbol.GetName())
+			continue
+		}
+
 		err := client.OpenFile(ctx, loc.URI.Path())
 		if err != nil {
 			toolsLogger.Error("Error opening file: %v", err)
@@ -78,7 +105,27 @@ func ReadDefinition(ctx context.Context, client *lsp.Client, symbolName string) 
 		}
 
 		banner := "---\n\n"
-		definition, loc, _, err := GetFullDefinition(ctx, client, loc)
+
+		// Try to get the full definition
+		// For Go, workspace/symbol returns just the symbol name range, so GetFullDefinition is needed
+		// For Dart, workspace/symbol returns the full definition range
+		definition := ""
+
+		// Try GetFullDefinition first for languages like Go that need it
+		def, newLoc, _, err := GetFullDefinition(ctx, client, loc)
+		if err == nil {
+			definition = def
+			loc = newLoc
+		} else {
+			// Fall back to extracting text directly from the location
+			// This works for Dart where workspace/symbol returns the full range
+			definition, err = ExtractTextFromLocation(loc)
+			if err != nil {
+				toolsLogger.Error("Error getting definition: %v", err)
+				continue
+			}
+		}
+
 		locationInfo := fmt.Sprintf(
 			"Symbol: %s\n"+
 				"File: %s\n"+
@@ -92,11 +139,6 @@ func ReadDefinition(ctx context.Context, client *lsp.Client, symbolName string) 
 			loc.Range.End.Line+1,
 			loc.Range.End.Character+1,
 		)
-
-		if err != nil {
-			toolsLogger.Error("Error getting definition: %v", err)
-			continue
-		}
 
 		definition = addLineNumbers(definition, int(loc.Range.Start.Line)+1)
 

@@ -1,0 +1,24 @@
+---
+
+Symbol: SharedClass
+/TEST_OUTPUT/workspace/types.dart
+Kind: Class
+Range: L3:C1 - L18:C2
+
+ 3|/// A shared class used across multiple files
+ 4|/// This class demonstrates hover information
+ 5|class SharedClass {
+ 6|  final int value;
+ 7|  
+ 8|  /// Creates a new SharedClass instance
+ 9|  SharedClass(this.value);
+10|  
+11|  /// Gets the current value
+12|  int getValue() => value;
+13|  
+14|  /// A method that processes the value
+15|  String process() {
+16|    return 'Processed: $value';
+17|  }
+18|}
+

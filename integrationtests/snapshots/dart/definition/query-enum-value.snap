@@ -1,0 +1,14 @@
+---
+
+Symbol: Color
+/TEST_OUTPUT/workspace/types.dart
+Kind: Enum
+Range: L32:C1 - L37:C2
+
+32|/// An enum for testing
+33|enum Color {
+34|  red,
+35|  green, 
+36|  blue
+37|}
+

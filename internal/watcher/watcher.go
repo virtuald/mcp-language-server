@@ -374,6 +374,11 @@ func matchesSimpleGlob(pattern, path string) bool {
 	if strings.HasPrefix(pattern, "**/") {
 		rest := strings.TrimPrefix(pattern, "**/")
 
+		// Special case: **/* matches everything
+		if rest == "*" {
+			return true
+		}
+
 		// If the rest is a simple file extension pattern like *.go
 		if strings.HasPrefix(rest, "*.") {
 			ext := strings.TrimPrefix(rest, "*")

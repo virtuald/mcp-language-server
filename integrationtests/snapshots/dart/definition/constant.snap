@@ -1,0 +1,10 @@
+---
+
+Symbol: SHARED_CONSTANT
+/TEST_OUTPUT/workspace/types.dart
+Kind: Variable
+Range: L29:C1 - L30:C46
+
+29|/// A constant value
+30|const String SHARED_CONSTANT = 'shared_value'
+

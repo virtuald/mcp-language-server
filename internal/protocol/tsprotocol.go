@@ -2563,7 +2563,7 @@ type GlobPattern = Or_GlobPattern // (alias)
 // See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification#hover
 type Hover struct {
 	// The hover's content
-	Contents MarkupContent `json:"contents"`
+	Contents Or_Hover_contents `json:"contents"`
 	// An optional range inside the text document that is used to
 	// visualize the hover, e.g. by changing the background color.
 	Range Range `json:"range,omitempty"`

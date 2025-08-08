@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"strings"
 	"testing"
 )
@@ -140,9 +141,71 @@ func normalizePaths(_ *testing.T, input string) string {
 				lines[i] = "/GOROOT" + parts[1]
 			}
 		}
+
+		// Normalize Dart SDK paths (various possible locations)
+		// Handle paths like /Users/*/fvm/versions/*/bin/cache/dart-sdk/
+		// or /opt/hostedtoolcache/dart/*/x64/
+		// or /home/*/.cache/dart-sdk/
+		if strings.Contains(line, "/dart-sdk/") || strings.Contains(line, "/lib/") {
+			// Look for common Dart SDK path patterns
+			patterns := []struct {
+				contains string
+				prefix   string
+			}{
+				{"/fvm/versions/", "/DART_SDK/"},
+				{"/hostedtoolcache/dart/", "/DART_SDK/"},
+				{"/.cache/dart-sdk/", "/DART_SDK/"},
+				{"/bin/cache/dart-sdk/", "/DART_SDK/"},
+			}
+
+			for _, pattern := range patterns {
+				if strings.Contains(line, pattern.contains) {
+					// Find where the SDK lib directory starts
+					if idx := strings.Index(line, "/lib/"); idx != -1 {
+						before := line[:idx]
+						after := line[idx+1:] // Skip the leading slash to avoid double slash
+						// Replace everything before /lib/ with /DART_SDK
+						if strings.Contains(before, "File: ") {
+							lines[i] = "File: " + pattern.prefix + after
+						} else {
+							lines[i] = pattern.prefix + after
+						}
+						break
+					}
+				}
+			}
+		}
+
+		// Normalize pub-cache paths
+		// Handle paths like /Users/*/.pub-cache/ or /home/*/.pub-cache/
+		if strings.Contains(line, "/.pub-cache/") {
+			parts := strings.Split(line, "/.pub-cache/")
+			if len(parts) > 1 {
+				// Replace with a simple placeholder path
+				if strings.Contains(line, "File: ") {
+					lines[i] = "File: /PUB_CACHE/" + parts[1]
+				} else {
+					lines[i] = "/PUB_CACHE/" + parts[1]
+				}
+			}
+		}
 	}
 
 	return strings.Join(lines, "\n")
+}
+
+// sortDefinitions sorts multi-definition results for deterministic ordering
+func sortDefinitions(input string) string {
+	// Split by definition separators (---\n\n)
+	definitions := strings.Split(input, "---\n\n")
+	if len(definitions) <= 1 {
+		return input // Single definition or no definitions
+	}
+
+	// Sort definitions as raw strings
+	sort.Strings(definitions)
+
+	return strings.Join(definitions, "---\n\n")
 }
 
 // FindRepoRoot locates the repository root by looking for specific indicators
@@ -177,6 +240,11 @@ func FindRepoRoot() (string, error) {
 func SnapshotTest(t *testing.T, languageName, toolName, testName, actualResult string) {
 	// Normalize paths in the result to avoid system-specific paths in snapshots
 	actualResult = normalizePaths(t, actualResult)
+
+	// Sort definitions for Dart tests to ensure deterministic ordering
+	if languageName == "dart" {
+		actualResult = sortDefinitions(actualResult)
+	}
 
 	// Get the absolute path to the snapshots directory
 	repoRoot, err := FindRepoRoot()

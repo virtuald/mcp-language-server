@@ -1,0 +1,7 @@
+```dart
+class HelperClass implements SharedInterface
+```
+*helper.dart*
+
+---
+Helper class for demonstration

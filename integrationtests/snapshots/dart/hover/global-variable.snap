@@ -1,0 +1,9 @@
+```dart
+HelperClass globalHelper
+```
+Type: `HelperClass`
+
+*helper.dart*
+
+---
+Global variable for testing

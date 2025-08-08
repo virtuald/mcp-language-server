@@ -1,0 +1,14 @@
+---
+
+Symbol: process()
+/TEST_OUTPUT/workspace/helper.dart
+Kind: Method
+Container Name: HelperClass
+Range: L17:C3 - L21:C4
+
+17|/// Process method specific to HelperClass
+18|  void process() {
+19|    doSomething();
+20|    print('Processing: ${getName()}');
+21|  }
+

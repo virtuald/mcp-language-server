@@ -1,0 +1,12 @@
+---
+
+Symbol: createHelper(…)
+/TEST_OUTPUT/workspace/helper.dart
+Kind: Function
+Range: L24:C1 - L27:C2
+
+24|/// A helper function that creates instances
+25|HelperClass createHelper(String name) {
+26|  return HelperClass(name);
+27|}
+

@@ -1,0 +1,8 @@
+```dart
+class SharedClass
+```
+*types.dart*
+
+---
+A shared class used across multiple files
+This class demonstrates hover information

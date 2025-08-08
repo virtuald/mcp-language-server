@@ -197,5 +197,16 @@ func QuerySymbol(ctx context.Context, client *lsp.Client, symbolName string) (st
 		}
 	}
 
+	// For qualified names like "ClassName.methodName", try searching for just the method name
+	// The filtering logic in ReadDefinition will handle matching the container
+	if len(results) == 0 && strings.Contains(symbolName, ".") {
+		parts := strings.Split(symbolName, ".")
+		if len(parts) == 2 {
+			// Search for just the method/field name
+			results, err = doQuerySymbol(ctx, client, parts[1])
+			// Keep the original symbolName for filtering
+		}
+	}
+
 	return symbolName, results, err
 }

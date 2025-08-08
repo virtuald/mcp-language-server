@@ -1,0 +1,73 @@
+---
+
+Symbol: main()
+/TEST_OUTPUT/workspace/main.dart
+Kind: Function
+Range: L5:C1 - L24:C2
+
+ 5|void main() {
+ 6|  print('Hello, World!');
+ 7|
+ 8|  var helper = HelperClass('test');
+ 9|  helper.process();
+10|
+11|  SharedClass shared = SharedClass(42);
+12|  print(shared.getValue());
+13|
+14|  // Use types
+15|  Color color = Color.red;
+16|  print(color);
+17|
+18|  // Use constant
+19|  print(SHARED_CONSTANT);
+20|
+21|  // Use function
+22|  var newHelper = createHelper('new');
+23|  print(newHelper.getName());
+24|}
+
+---
+
+Symbol: main()
+File: /DART_SDK/lib/_internal/vm/bin/vmservice_io.dart
+Kind: Function
+Range: L273:C1 - L309:C2
+
+273|@pragma('vm:entry-point', !bool.fromEnvironment('dart.vm.product'))
+274|void main() {
+275|  // Set embedder hooks.
+276|  VMServiceEmbedderHooks.cleanup = cleanupCallback;
+277|  VMServiceEmbedderHooks.createTempDir = createTempDirCallback;
+278|  VMServiceEmbedderHooks.ddsConnected = ddsConnectedCallback;
+279|  VMServiceEmbedderHooks.ddsDisconnected = ddsDisconnectedCallback;
+280|  VMServiceEmbedderHooks.deleteDir = deleteDirCallback;
+281|  VMServiceEmbedderHooks.writeFile = writeFileCallback;
+282|  VMServiceEmbedderHooks.writeStreamFile = writeStreamFileCallback;
+283|  VMServiceEmbedderHooks.readFile = readFileCallback;
+284|  VMServiceEmbedderHooks.listFiles = listFilesCallback;
+285|  VMServiceEmbedderHooks.serverInformation = serverInformationCallback;
+286|  VMServiceEmbedderHooks.webServerControl = webServerControlCallback;
+287|  VMServiceEmbedderHooks.acceptNewWebSocketConnections =
+288|      webServerAcceptNewWebSocketConnections;
+289|  VMServiceEmbedderHooks.serveObservatory = serveObservatoryCallback;
+290|  VMServiceEmbedderHooks.getResidentCompilerInfoFile =
+291|      _getResidentCompilerInfoFile;
+292|
+293|  server = Server(
+294|    // Always instantiate the vmservice object so that the exit message
+295|    // can be delivered and waiting loaders can be cancelled.
+296|    VMService(),
+297|    _ip,
+298|    _port,
+299|    _originCheckDisabled,
+300|    _authCodesDisabled,
+301|    _serviceInfoFilename,
+302|    _enableServicePortFallback,
+303|  );
+304|
+305|  if (_autoStart) {
+306|    _toggleWebServer();
+307|  }
+308|  _registerSignalHandler();
+309|}
+

@@ -1,0 +1,7 @@
+```dart
+String process()
+```
+*types.dart*
+
+---
+A method that processes the value

@@ -1,0 +1,7 @@
+```dart
+HelperClass createHelper(String name)
+```
+*helper.dart*
+
+---
+A helper function that creates instances

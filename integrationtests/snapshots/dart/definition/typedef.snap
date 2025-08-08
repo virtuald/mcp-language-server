@@ -1,0 +1,10 @@
+---
+
+Symbol: ProcessFunction
+/TEST_OUTPUT/workspace/types.dart
+Kind: Class
+Range: L26:C1 - L27:C48
+
+26|/// A type alias for testing
+27|typedef ProcessFunction = String Function(int);
+

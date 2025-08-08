@@ -1,0 +1,28 @@
+---
+
+Symbol: HelperClass
+/TEST_OUTPUT/workspace/helper.dart
+Kind: Class
+Range: L3:C1 - L22:C2
+
+ 3|/// Helper class for demonstration
+ 4|class HelperClass implements SharedInterface {
+ 5|  final String name;
+ 6|  
+ 7|  HelperClass(this.name);
+ 8|  
+ 9|  @override
+10|  void doSomething() {
+11|    print('Doing something with $name');
+12|  }
+13|  
+14|  @override
+15|  String getName() => name;
+16|  
+17|  /// Process method specific to HelperClass
+18|  void process() {
+19|    doSomething();
+20|    print('Processing: ${getName()}');
+21|  }
+22|}
+
