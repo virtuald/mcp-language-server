@@ -27,6 +27,8 @@ type config struct {
 	lspCommand   string
 	openGlobs    StringArrayFlag
 	lspArgs      []string
+	httpMode     bool
+	httpPort     string
 }
 
 type mcpServer struct {
@@ -57,6 +59,8 @@ func parseConfig() (*config, error) {
 	flag.StringVar(&cfg.workspaceDir, "workspace", "", "Path to workspace directory")
 	flag.StringVar(&cfg.lspCommand, "lsp", "", "LSP command to run (args should be passed after --)")
 	flag.Var(&cfg.openGlobs, "open", "Glob of files to open by default (can specify more than once)")
+	flag.BoolVar(&cfg.httpMode, "http", false, "Enable HTTP server mode instead of stdio")
+	flag.StringVar(&cfg.httpPort, "port", "80", "HTTP port to listen on (only used with -http)")
 	flag.Parse()
 
 	// Get remaining args after -- as LSP arguments
@@ -170,6 +174,12 @@ func (s *mcpServer) start() error {
 	err := s.registerTools()
 	if err != nil {
 		return fmt.Errorf("tool registration failed: %v", err)
+	}
+
+	if s.config.httpMode {
+		coreLogger.Info("Starting HTTP server on port %s", s.config.httpPort)
+		httpServer := server.NewStreamableHTTPServer(s.mcpServer)
+		return httpServer.Start(":" + s.config.httpPort)
 	}
 
 	return server.ServeStdio(s.mcpServer)
